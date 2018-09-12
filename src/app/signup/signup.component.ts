@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import 'rxjs';
+import { filter } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-signup',
@@ -10,7 +12,7 @@ import 'rxjs';
 export class SignupComponent implements OnInit {
   form: FormGroup;
   email = new FormControl("", [Validators.required,
-                              Validators.pattern("[^ @]*@[^ @]")]);
+                              Validators.pattern("[^ @]*@[^ @]*")]);
   password = new FormControl("", Validators.required);
 
   constructor(fb: FormBuilder) { 
@@ -19,6 +21,7 @@ export class SignupComponent implements OnInit {
       "password": this.password
     });
     this.form.valueChanges
+      .pipe(filter(data => this.form.valid))          
       .subscribe(data => console.log(JSON.stringify(data)));
   }
 
